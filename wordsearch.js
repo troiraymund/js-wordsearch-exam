@@ -62,32 +62,52 @@ function createTiles(row, col, grid, word){
     }
   };
   checkVertical(row, 1, col, 0, whole, word, 0);
-  //checkDiagonal();
-  return count; 
-  //
+  checkDiagonal(row, col, whole, word);
+  return count;
 }
 
 function checkDiagonal(maxRow, maxLetters, whole, word){
+    var count = 0;
     var currRow = 0;
-    var downR = "";
-    var downL = "";
-    var upR = "";
-    var upL = "";
+    var downR = [];
+    var downL = [];
+    var upR = [];
+    var upL = [];
+    var tDownR = ""
+    var tDownL = "";
+    var tUpR = "";
+    var tUpL = "";
     for(i=0; i<whole.length; i++){
       if(i != 0 && i%maxLetters===0){
         currRow++;
       }
       if(currRow + word.length <= maxRow && (i-(currRow*maxLetters)) + word.length-1 < maxLetters){ //downward to right
-        downR+=i;
+        for(x=0; x<word.length; x++){
+            tDownR+=whole[i+(x*maxLetters)+x];
+        }
+        downR.push(tDownR);
+        tDownR="";
       }
       if(currRow - (word.length-1) >= 0 && ((i-(currRow*maxLetters)) - (word.length-1)) >= 0){ //upward to left
-        upL+=i;
+        for(x=0; x<word.length; x++){
+            tDownL+=whole[i-(x*maxLetters)-x];
+        }
+        downL.push(tDownL);
+        tDownL="";
       }
-      if(currRow + word.length <= maxRow && ((i-(currRow*maxLetters)) - (word.length-1)) >= 0){ //upward to right
-        upR+=i;
+      if(currRow + word.length <= maxRow && ((i-(currRow*maxLetters)) - (word.length-1)) >= 0){ //downward to left
+        for(x=0; x<word.length; x++){
+            tUpR+=whole[i+(x*maxLetters)-x];
+        }
+        upR.push(tUpR);
+        tUpR="";
       }
-      if(currRow - (word.length-1) >= 0 && (i-(currRow*maxLetters)) + word.length-1 < maxLetters){ //downward to left
-        downL+=i;
+      if(currRow - (word.length-1) >= 0 && (i-(currRow*maxLetters)) + word.length-1 < maxLetters){ //upward to right
+        for(x=0; x<word.length; x++){
+            tUpL+=whole[i-(x*maxLetters)+x];
+        }
+        upL.push(tUpL);
+        tUpL="";
       }
     }
 }
