@@ -4,43 +4,6 @@ function testCase(number, row, col, grid, word){
 	}
 }
 
-function checkVertical(row, newRow, col, newCol, whole, word, count){
-  var newCount = count;
-  var currRow = newRow;
-  var currCol = newCol;
-  var down = "";
-  var up = "";
-
-  for(y=0; y<whole.length; y++){
-        if(y===whole.length-1){
-          currCol++;
-        }
-        if(y%col===newCol && currRow != row){
-          down+=whole[y];
-        } else if (y%col===newCol && currRow === row) {
-          down+=whole[y];
-        }
-    
-  }
-  if(word.includes(down)){ //downward
-      newCount++;
-  }
-  for(i=down.length-1; i>=0; i--){
-    up+=down[i]
-  }
-  if(word.includes(up)){ //upward
-    newCount++;
-  }
-  down="";
-  up="";
-  
-  if(currCol < col){
-      checkVertical(row, currRow, col, currCol, whole, word, newCount);
-  } else {
-      return newCount;
-  }
-}
-
 function createTiles(row, col, grid, word){
 	var count = 0;
   var test = "";
@@ -66,8 +29,45 @@ function createTiles(row, col, grid, word){
   return count;
 }
 
+function checkVertical(row, newRow, col, newCol, whole, word, count){
+  var newCount = count;
+  var currRow = newRow;
+  var currCol = newCol;
+  var down = "";
+  var up = "";
+
+  for(y=0; y<whole.length; y++){
+        if(y===whole.length-1){
+          currCol++;
+        }
+        if(y%col===newCol && currRow != row){
+          down+=whole[y];
+        } else if (y%col===newCol && currRow === row) {
+          down+=whole[y];
+        }
+  }
+  if(down.includes(word)){ //downward
+      newCount++;
+  }
+  for(i=down.length-1; i>=0; i--){
+    up+=down[i]
+  }
+  if(up.includes(word)){ //upward
+    newCount++;
+  }
+  down="";
+  up="";
+  
+  if(currCol < col){
+      checkVertical(row, currRow, col, currCol, whole, word, newCount);
+  } else {
+      console.log(newCount);
+      return newCount;
+  }
+}
+
 function checkDiagonal(maxRow, maxLetters, whole, word){
-    var count = 0;
+    var diagCount = 0;
     var currRow = 0;
     var downR = [];
     var downL = [];
@@ -110,4 +110,19 @@ function checkDiagonal(maxRow, maxLetters, whole, word){
         tUpL="";
       }
     }
+    for(i=0; i<downR.length; i++){
+      if(downR[i].includes(word)){
+        diagCount++;
+      }
+      if(downL[i].includes(word)){
+        diagCount++;
+      }
+      if(upR[i].includes(word)){
+        diagCount++;
+      }
+      if(upL[i].includes(word)){
+        diagCount++;
+      }
+    }
+    console.log(diagCount);
 }
